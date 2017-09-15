@@ -181,12 +181,7 @@ class MemberDeserializer(private val c: DeserializationContext) {
         function.isSuspend = Flags.IS_SUSPEND.get(flags)
         function.isHeader = Flags.IS_HEADER_FUNCTION.get(flags)
 
-        if (proto.hasContract()) {
-            val contractDescriptor = ContractDeserializer(c, function).deserializeContract(proto.contract)
-            lazyContractProvider.setContractDescriptor(contractDescriptor)
-        } else {
-            lazyContractProvider.setContractDescriptor(null)
-        }
+        lazyContractProvider.setContractDescriptor(ContractDeserializer(c, function).deserializeContractFromFunction(proto))
         return function
     }
 

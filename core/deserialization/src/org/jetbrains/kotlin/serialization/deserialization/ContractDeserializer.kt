@@ -32,7 +32,16 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.utils.addIfNotNull
 
 class ContractDeserializer(private val c: DeserializationContext, private val ownerFunction: FunctionDescriptor) {
-    fun deserializeContract(proto: ProtoBuf.Contract): ContractDescriptor? {
+    fun deserializeContractFromFunction(proto: ProtoBuf.Function): ContractDescriptor? {
+        if (!proto.hasContract()) return null
+
+        val deserializationConfiguration = c.components.configuration
+        if (!deserializationConfiguration.returnsEffectAllowed && !deserializationConfiguration.callsInPlaceEffectAllowed) return null
+
+        return deserializeContract(proto.contract)
+    }
+
+    private fun deserializeContract(proto: ProtoBuf.Contract): ContractDescriptor? {
         val effects = proto.effectList.map { deserializePossiblyConditionalEffect(it) ?: return null }
         return ContractDescriptor(effects, ownerFunction)
     }
