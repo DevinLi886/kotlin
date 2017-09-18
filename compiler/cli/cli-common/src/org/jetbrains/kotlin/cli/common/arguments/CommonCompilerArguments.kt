@@ -110,6 +110,7 @@ abstract class CommonCompilerArguments : CommonToolArguments() {
         return HashMap<AnalysisFlag<*>, Any>().apply {
             put(AnalysisFlag.skipMetadataVersionCheck, skipMetadataVersionCheck)
             put(AnalysisFlag.multiPlatformDoNotCheckImpl, noCheckImpl)
+            put(AnalysisFlag.allowKotlinPackage, allowKotlinPackage)
         }
     }
 
